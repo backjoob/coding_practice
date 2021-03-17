@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from array import array
-
+from cmd import Cmd
 
 class TicTacToeException(Exception):
     """
@@ -85,6 +85,21 @@ class TicTacToe:
         )
 
 
+class TicTacToeCmd(Cmd):
+    def __init__(self):
+        super().__init__()
+        self.game = TicTacToe()
+        print(self.game)
+
+    def do_play(self, args):
+        player, row, col = map(int, args.split())
+        try:
+            self.game.play(player, (row, col))
+        except TicTacToeException as exc:
+            print(exc)
+        print(self.game)
+
+
 def main():
     t = TicTacToe()
     print(t)
@@ -92,6 +107,7 @@ def main():
     for i in range(t.num_spaces):
         t.play(i % 2, t.i_to_rc(i))
     print(t)
+    TicTacToeCmd().cmdloop()
 
 
 if __name__ == "__main__":
